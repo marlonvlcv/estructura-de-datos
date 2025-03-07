@@ -16,7 +16,7 @@ def extract_from_log(regex, filename):
                     ips_unicas.add(ip)
                     resultados.append((ip, fecha, hora, metodo, codigo))
 
-    return resultados, contador_error  # Aquí se retorna contador_error en lugar de status_count
+    return resultados, contador_error  
 
 logfile = r"C:\Users\marlo\Downloads\access.log\access.log"
 
