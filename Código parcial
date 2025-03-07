@@ -1,0 +1,36 @@
+import re
+from collections import defaultdict
+
+def extract_from_log(regex, filename):
+    unique_ips = set() 
+    status_count = defaultdict(int) 
+    resultados = [] 
+
+    with open(filename, "r", encoding="utf8", errors="ignore") as file:
+        for line in file:
+            coincidencia = re.search(regex, line)
+            if coincidencia:
+                ip, fecha, hora, metodo, codigo = coincidencia.groups()
+                status_count[codigo] += 1  
+                if ip not in unique_ips:  
+                    unique_ips.add(ip)
+                    resultados.append((ip, fecha, hora, metodo, codigo))
+
+    return resultados, status_count
+
+
+logfile_path = r"C:\Users\marlo\Downloads\access.log\access.log"
+
+
+regex = r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s-\s-\s\[(\d{2}/[a-zA-Z]{3}/\d{4}):(\d{2}:\d{2}:\d{2})\s\+\d{4,5}\]\s"([A-Z]{3,7})\s[^"]+"\s(\d{3})'
+
+
+resultado, status_count = extract_from_log(regex, logfile_path)
+
+
+for ip, fecha, hora, metodo, codigo in resultado:
+    print(f'La IP es: {ip}, la fecha es: {fecha}, la hora es: {hora}, el método usado es: {metodo}, y el código de estado es: {codigo}')
+
+print("\nConteo de códigos de estado:")
+for codigo, cantidad in status_count.items():
+    print(f'Código {codigo}: {cantidad} veces')
